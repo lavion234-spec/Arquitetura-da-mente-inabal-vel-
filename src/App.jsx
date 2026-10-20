@@ -74,11 +74,11 @@ const questions = [
   },
   {
     question: 'O produto é físico ou digital?',
-    answer: 'É um e-book. O formato do arquivo e os detalhes de acesso devem ser confirmados pelo responsável pela venda antes da publicação: [informar formato e modo de acesso].',
+    answer: 'É um e-book em PDF com 26 páginas. A forma de acesso será informada quando a oferta for aberta.',
   },
   {
     question: 'Como receberei o acesso?',
-    answer: '[Informar como e quando o acesso será enviado após a confirmação do pagamento.]',
+    answer: 'O método e o prazo de entrega serão apresentados antes da abertura da compra.',
   },
   {
     question: 'O e-book substitui acompanhamento psicológico?',
@@ -86,11 +86,11 @@ const questions = [
   },
   {
     question: 'Quais são as condições de reembolso?',
-    answer: '[Inserir a política de reembolso aplicável, incluindo prazo e procedimento, conforme as condições de compra.]',
+    answer: 'A política de reembolso será informada junto às condições de compra, antes da abertura do checkout.',
   },
   {
     question: 'Quais formas de pagamento e plataforma são aceitas?',
-    answer: '[Informar os meios de pagamento e a plataforma de checkout antes de publicar a oferta.]',
+    answer: 'Os meios de pagamento e a plataforma serão apresentados quando a oferta estiver disponível.',
   },
 ];
 
@@ -214,7 +214,7 @@ function App() {
             <h1>Você não precisa controlar tudo. <em>Precisa saber onde colocar sua energia.</em></h1>
             <p className="hero-description">Um guia prático de estoicismo para examinar suas reações, agir com mais intenção e parar de gastar energia tentando controlar o que não depende de você.</p>
             <a className="button button--light" href="#conteudo" onClick={() => notifyCta('hero')}>Veja o conteúdo do e-book <ArrowIcon /></a>
-            <p className="hero-note">Um e-book sobre desejo, ação e assentimento — com exercícios para experimentar na rotina.</p>
+            <p className="hero-note">PDF com 26 páginas, quatro capítulos, exercícios e um plano progressivo de sete dias.</p>
           </div>
           <BookMockup />
           <div className="hero-index" aria-hidden="true"><span>01</span><span>—</span><span>10</span></div>
@@ -266,6 +266,7 @@ function App() {
               <li><span>04</span> Escolha o próximo passo depois de examinar a impressão, não no primeiro impulso.</li>
             </ol>
             <p className="sample-source">Síntese do protocolo de dez segundos apresentado no e-book.</p>
+            <a className="text-link sample-cta" href="#oferta" onClick={() => notifyCta('sample')}>Ver preço e disponibilidade <ArrowIcon /></a>
           </article>
           <p className="content-endnote"><span>UMA NOTA</span> O plano de sete dias é um ritmo sugerido para experimentar as práticas, não uma promessa de transformação em uma semana.</p>
         </section>
@@ -302,14 +303,20 @@ function App() {
             <p className="eyebrow">O E-BOOK</p>
             <h2 id="product-title">Uma leitura para levar da página para a rotina.</h2>
             <p className="product-description">A Arquitetura da Mente Inabalável organiza três disciplinas estoicas em uma leitura prática, com perguntas e exercícios para observar como você deseja, age e interpreta.</p>
+            <div className="product-facts" aria-label="Dados do e-book">
+              <p><span>FORMATO</span><strong>PDF</strong></p>
+              <p><span>EXTENSÃO</span><strong>26 páginas</strong></p>
+              <p><span>ESTRUTURA</span><strong>4 capítulos</strong></p>
+            </div>
             <ul className="product-list">
               <li>Disciplina do desejo, da ação e do assentimento</li>
               <li>Filtro de controle e checklist de intenção diária</li>
               <li>Protocolo dos dez segundos antes de reagir</li>
               <li>Reflexão matinal e revisão noturna</li>
               <li>Plano progressivo de implementação de sete dias</li>
+              <li>Conclusão e resumo executivo com os três mandamentos</li>
             </ul>
-            <p className="product-format"><span>FORMATO</span> E-book. <span>ARQUIVO E ENTREGA</span> [confirmar formato do arquivo e modo de acesso antes da publicação].</p>
+            <p className="product-format">A forma de acesso será informada quando a oferta estiver disponível.</p>
             <a className="text-link" href="#oferta" onClick={() => notifyCta('product')}>Ver preço e condições <ArrowIcon /></a>
           </div>
         </section>
@@ -320,26 +327,24 @@ function App() {
             <div className="offer-copy">
               <h2 id="offer-title">Um guia para começar pelo que está ao seu alcance.</h2>
               <p>Leia, experimente as práticas e observe o que muda na sua forma de responder. Sem promessa de atalhos — o valor está no exercício.</p>
-              <div className="offer-details">
-                <p><span>Pagamento</span>[informar formas de pagamento]</p>
-                <p><span>Checkout</span>[inserir plataforma e URL]</p>
-                <p><span>Acesso e entrega</span>[informar condições de acesso e entrega]</p>
-                <p><span>Reembolso</span>[inserir política aplicável]</p>
+              <div className="offer-availability">
+                <p className="availability-label">A compra ainda não está disponível</p>
+                <p>Pagamento, entrega, acesso e política de reembolso serão apresentados antes da abertura do checkout.</p>
               </div>
             </div>
             <div className="offer-ticket">
               <PriceBlock />
-              <button className="button button--disabled" type="button" disabled aria-describedby="checkout-note">Checkout ainda não configurado</button>
-              <p id="checkout-note" className="checkout-note">O botão será ativado quando a URL real do checkout for informada.</p>
+              <button className="button button--disabled" type="button" disabled aria-describedby="checkout-note">Compra ainda não disponível</button>
+              <p id="checkout-note" className="checkout-note">O checkout será habilitado quando a oferta for aberta.</p>
             </div>
           </div>
-          <p className="offer-disclaimer">A referência de R$ 75 e o preço promocional de R$ 25 foram informados para esta oferta. Confirme que o preço de referência é real e documentável antes da publicação.</p>
+          <p className="offer-disclaimer">Sem contagem regressiva ou escassez artificial. A compra será aberta com as condições completas de pagamento, acesso e reembolso.</p>
         </section>
 
         <section className="faq-section section-pad" id="perguntas">
           <div className="faq-intro">
             <SectionHeading eyebrow="ANTES DE DECIDIR" title="Perguntas diretas, respostas claras.">
-              <p>Quando uma condição depende da operação de venda, ela aparece como informação a preencher.</p>
+              <p>As condições de compra serão informadas antes de a oferta ser aberta.</p>
             </SectionHeading>
           </div>
           <div className="faq-list">
@@ -370,11 +375,11 @@ function App() {
         </a>
         <p className="footer-note">Filosofia prática, sem promessas fáceis.</p>
         <div className="footer-details">
-          <p><span>Responsável pela venda</span>[informar nome/razão social e dados aplicáveis]</p>
-          <p><span>Suporte</span>[informar e-mail ou canal de atendimento]</p>
-          <a href="#rodape-legal" id="rodape-legal">Termos de uso <span>[inserir link]</span></a>
-          <a href="#rodape-legal">Privacidade <span>[inserir link]</span></a>
-          <a href="#rodape-legal">Compra e reembolso <span>[inserir link]</span></a>
+          <p><span>Responsável pela venda</span>Identificação apresentada antes da abertura da oferta.</p>
+          <p><span>Suporte</span>Canal de contato informado antes da compra.</p>
+          <p><span>Termos de uso</span>Disponíveis quando a oferta for aberta.</p>
+          <p><span>Privacidade</span>Política publicada antes da coleta de dados.</p>
+          <p><span>Compra e reembolso</span>Condições apresentadas antes do checkout.</p>
         </div>
         <div className="footer-bottom"><span>© {new Date().getFullYear()} A Arquitetura da Mente Inabalável</span><span>Um material educativo. Não substitui acompanhamento profissional.</span></div>
       </footer>
