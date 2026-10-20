@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+const CHECKOUT_URL = 'https://pay.kirvano.com/a5c2e5d7-bf7a-4e34-a6e5-519e327936dd';
+
 const disciplines = [
   {
     number: 'I',
@@ -90,7 +92,7 @@ const questions = [
   },
   {
     question: 'Quais formas de pagamento e plataforma são aceitas?',
-    answer: 'Os meios de pagamento e a plataforma serão apresentados quando a oferta estiver disponível.',
+    answer: 'O checkout da Kirvano apresenta cartão, Pix, Apple Pay e outros métodos. O valor parcelado tem acréscimo; confira as condições atualizadas na página antes de concluir.',
   },
 ];
 
@@ -158,7 +160,7 @@ function PriceBlock({ compact = false }) {
       <span className="price-label">Condição especial</span>
       <p className="price-reference">De <s>R$ 75</s> por</p>
       <p className="price-current"><span>R$</span> 25</p>
-      <p className="price-footnote">Preço informado para esta oferta. Sem prazo ou contagem regressiva.</p>
+      <p className="price-footnote">R$ 25 à vista. O parcelamento pode ter acréscimo.</p>
     </div>
   );
 }
@@ -328,23 +330,23 @@ function App() {
               <h2 id="offer-title">Um guia para começar pelo que está ao seu alcance.</h2>
               <p>Leia, experimente as práticas e observe o que muda na sua forma de responder. Sem promessa de atalhos — o valor está no exercício.</p>
               <div className="offer-availability">
-                <p className="availability-label">A compra ainda não está disponível</p>
-                <p>Pagamento, entrega, acesso e política de reembolso serão apresentados antes da abertura do checkout.</p>
+                <p className="availability-label">Checkout disponível pela Kirvano</p>
+                <p>R$ 25 à vista ou parcelamento com acréscimo. Confira os métodos de pagamento e as condições de acesso antes de concluir.</p>
               </div>
             </div>
             <div className="offer-ticket">
               <PriceBlock />
-              <button className="button button--disabled" type="button" disabled aria-describedby="checkout-note">Compra ainda não disponível</button>
-              <p id="checkout-note" className="checkout-note">O checkout será habilitado quando a oferta for aberta.</p>
+              <a className="button button--checkout" href={CHECKOUT_URL} onClick={() => notifyCta('offer')}>Comprar por R$ 25 <ArrowIcon /></a>
+              <p id="checkout-note" className="checkout-note">Você continuará no checkout da Kirvano para revisar e confirmar o pedido.</p>
             </div>
           </div>
-          <p className="offer-disclaimer">Sem contagem regressiva ou escassez artificial. A compra será aberta com as condições completas de pagamento, acesso e reembolso.</p>
+          <p className="offer-disclaimer">A página de checkout apresenta os valores parcelados, meios de pagamento e termos vigentes antes da confirmação.</p>
         </section>
 
         <section className="faq-section section-pad" id="perguntas">
           <div className="faq-intro">
             <SectionHeading eyebrow="ANTES DE DECIDIR" title="Perguntas diretas, respostas claras.">
-              <p>As condições de compra serão informadas antes de a oferta ser aberta.</p>
+              <p>Confira as condições finais diretamente no checkout antes de confirmar a compra.</p>
             </SectionHeading>
           </div>
           <div className="faq-list">
@@ -363,7 +365,7 @@ function App() {
           <div className="closing-rule" aria-hidden="true" />
           <p className="eyebrow eyebrow--light">A PRÓXIMA RESPOSTA AINDA É SUA</p>
           <h2>Você não escolhe todos os acontecimentos do seu dia. <em>Mas pode começar a examinar a maneira como responde a eles.</em></h2>
-          <a className="button button--light" href="#oferta" onClick={() => notifyCta('closing')}>Conheça o e-book <ArrowIcon /></a>
+          <a className="button button--light" href={CHECKOUT_URL} onClick={() => notifyCta('closing')}>Comprar por R$ 25 <ArrowIcon /></a>
           <p>E-book de filosofia estoica aplicada à rotina. R$ 25 na condição informada.</p>
         </section>
       </main>
