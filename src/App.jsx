@@ -166,8 +166,6 @@ function PriceBlock({ compact = false }) {
 function App() {
   const [faqOpen, setFaqOpen] = useState(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const showTestimonialPreview = import.meta.env.DEV
-    || new URLSearchParams(window.location.search).get('preview') === 'depoimentos';
 
   function notifyCta(location) {
     window.dispatchEvent(new CustomEvent('ebook:cta', { detail: { location } }));
@@ -323,9 +321,9 @@ function App() {
           </div>
         </section>
 
-        {showTestimonialPreview && (
+        {import.meta.env.DEV && (
           <section className="dev-testimonials section-pad" aria-label="Prévia local de comentários fictícios de leitores">
-            <p className="dev-testimonials-warning">PRÉVIA DE TESTE · COMENTÁRIOS FICTÍCIOS · NÃO SÃO DEPOIMENTOS REAIS</p>
+            <p className="dev-testimonials-warning">AMBIENTE DE TESTE · COMENTÁRIOS FICTÍCIOS · NÃO SÃO DEPOIMENTOS REAIS · NÃO PUBLICAR</p>
             <SectionHeading eyebrow="PRÉVIA DE LAYOUT" title="Comentários de leitores">
               <p>Conteúdo demonstrativo para avaliar a apresentação visual dos depoimentos.</p>
             </SectionHeading>
