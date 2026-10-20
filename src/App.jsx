@@ -165,6 +165,20 @@ function PriceBlock({ compact = false }) {
   );
 }
 
+function CheckoutButton({ location, className = 'button button--checkout', children = 'Comprar por R$ 25' }) {
+  return (
+    <a
+      className={className}
+      href={CHECKOUT_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => window.dispatchEvent(new CustomEvent('ebook:cta', { detail: { location } }))}
+    >
+      {children} <ArrowIcon />
+    </a>
+  );
+}
+
 function App() {
   const [faqOpen, setFaqOpen] = useState(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -215,7 +229,10 @@ function App() {
             <p className="eyebrow eyebrow--light"><span className="eyebrow-line" /> E-BOOK · GUIA PRÁTICO DAS TRÊS DISCIPLINAS ESTOICAS</p>
             <h1>Você não precisa controlar tudo. <em>Precisa saber onde colocar sua energia.</em></h1>
             <p className="hero-description">Um guia prático de estoicismo para examinar suas reações, agir com mais intenção e parar de gastar energia tentando controlar o que não depende de você.</p>
-            <a className="button button--light" href="#conteudo" onClick={() => notifyCta('hero')}>Veja o conteúdo do e-book <ArrowIcon /></a>
+            <div className="hero-actions">
+              <CheckoutButton location="hero" className="button button--checkout button--hero-buy">Comprar por R$ 25</CheckoutButton>
+              <a className="hero-content-link" href="#conteudo" onClick={() => notifyCta('hero-content')}>Ver o conteúdo primeiro <ArrowIcon /></a>
+            </div>
             <p className="hero-note">PDF com 26 páginas, quatro capítulos, exercícios e um plano progressivo de sete dias.</p>
           </div>
           <BookMockup />
@@ -319,7 +336,10 @@ function App() {
               <li>Conclusão e resumo executivo com os três mandamentos</li>
             </ul>
             <p className="product-format">A forma de acesso será informada quando a oferta estiver disponível.</p>
-            <a className="text-link" href="#oferta" onClick={() => notifyCta('product')}>Ver preço e condições <ArrowIcon /></a>
+            <div className="product-actions">
+              <CheckoutButton location="product" />
+              <a className="text-link" href="#oferta" onClick={() => notifyCta('product-details')}>Ver condições <ArrowIcon /></a>
+            </div>
           </div>
         </section>
 
@@ -336,7 +356,7 @@ function App() {
             </div>
             <div className="offer-ticket">
               <PriceBlock />
-              <a className="button button--checkout" href={CHECKOUT_URL} onClick={() => notifyCta('offer')}>Comprar por R$ 25 <ArrowIcon /></a>
+              <CheckoutButton location="offer" />
               <p id="checkout-note" className="checkout-note">Você continuará no checkout da Kirvano para revisar e confirmar o pedido.</p>
             </div>
           </div>
@@ -365,7 +385,7 @@ function App() {
           <div className="closing-rule" aria-hidden="true" />
           <p className="eyebrow eyebrow--light">A PRÓXIMA RESPOSTA AINDA É SUA</p>
           <h2>Você não escolhe todos os acontecimentos do seu dia. <em>Mas pode começar a examinar a maneira como responde a eles.</em></h2>
-          <a className="button button--light" href={CHECKOUT_URL} onClick={() => notifyCta('closing')}>Comprar por R$ 25 <ArrowIcon /></a>
+          <CheckoutButton location="closing" className="button button--checkout button--closing-buy" />
           <p>E-book de filosofia estoica aplicada à rotina. R$ 25 na condição informada.</p>
         </section>
       </main>
