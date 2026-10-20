@@ -321,6 +321,29 @@ function App() {
           </div>
         </section>
 
+        {import.meta.env.DEV && (
+          <section className="dev-testimonials section-pad" aria-label="Prévia local de comentários fictícios de leitores">
+            <p className="dev-testimonials-warning">AMBIENTE DE TESTE · COMENTÁRIOS FICTÍCIOS · NÃO SÃO DEPOIMENTOS REAIS · NÃO PUBLICAR</p>
+            <SectionHeading eyebrow="PRÉVIA DE LAYOUT" title="Comentários de leitores">
+              <p>Conteúdo demonstrativo para avaliar a apresentação visual dos depoimentos.</p>
+            </SectionHeading>
+            <div className="dev-testimonial-grid">
+              <figure>
+                <blockquote>“As três disciplinas organizam a leitura de um jeito fácil de acompanhar.”</blockquote>
+                <figcaption>Pessoa fictícia A · conteúdo de teste</figcaption>
+              </figure>
+              <figure>
+                <blockquote>“O exemplo dos dez segundos deixa a proposta prática bem clara.”</blockquote>
+                <figcaption>Pessoa fictícia B · conteúdo de teste</figcaption>
+              </figure>
+              <figure>
+                <blockquote>“O resumo executivo ajuda a visualizar os principais temas do guia.”</blockquote>
+                <figcaption>Pessoa fictícia C · conteúdo de teste</figcaption>
+              </figure>
+            </div>
+          </section>
+        )}
+
         <section className="offer-section section-pad" id="oferta" aria-labelledby="offer-title">
           <div className="offer-topline"><span className="offer-burst" aria-hidden="true">BLACK<br />FRIDAY</span><p className="eyebrow eyebrow--light">UMA ESCOLHA CONCRETA</p></div>
           <div className="offer-layout">
