@@ -20,7 +20,7 @@ npm run preview
 
 O site é publicado automaticamente em `https://lavion234-spec.github.io/Arquitetura-da-mente-inabal-vel-/` quando há um push para `main`, pelo workflow `.github/workflows/deploy.yml`.
 
-Em **Settings → Pages**, selecione **GitHub Actions** como origem de build/deploy, caso ainda não esteja configurada.
+Cada push para `main` publica automaticamente. Para a ativação inicial, selecione **GitHub Actions** em **Settings → Pages**. Como alternativa, crie o secret `PAGES_ADMIN_TOKEN` no repositório com um token de acesso fino que tenha permissões administrativas e de Pages; o workflow poderá habilitar o Pages automaticamente. Nunca coloque esse token nos arquivos do projeto.
 
 ## Dados comerciais a configurar
 

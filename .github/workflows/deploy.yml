@@ -35,6 +35,9 @@ jobs:
         run: npm run build
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: ${{ secrets.PAGES_ADMIN_TOKEN != '' }}
+          token: ${{ secrets.PAGES_ADMIN_TOKEN || github.token }}
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
