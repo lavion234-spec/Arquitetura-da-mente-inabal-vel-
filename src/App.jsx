@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
 
-const CHECKOUT_URL = 'https://pay.kirvano.com/a5c2e5d7-bf7a-4e34-a6e5-519e327936dd';
+const bundleBooks = [
+  {
+    image: 'capa-ebook.png',
+    title: 'A Arquitetura da Mente Inabalável',
+  },
+  {
+    image: 'manual-estoico-moderno.png',
+    title: 'O Manual do Estoico Moderno: Sabedoria e Serenidade',
+  },
+  {
+    image: 'capa-7-caminhos.png',
+    title: '7 Caminhos para uma Vida com Mais Sentido',
+  },
+];
 
 const disciplines = [
   {
@@ -76,11 +89,11 @@ const questions = [
   },
   {
     question: 'O produto é físico ou digital?',
-    answer: 'É um e-book em PDF com 26 páginas. A forma de acesso será informada quando a oferta for aberta.',
+    answer: 'A oferta reúne três e-books digitais por R$ 30 no total. Os formatos e as condições de acesso serão informados quando o checkout estiver disponível.',
   },
   {
     question: 'Como receberei o acesso?',
-    answer: 'O método e o prazo de entrega serão apresentados antes da abertura da compra.',
+    answer: 'O link de compra ainda não está disponível. As informações de acesso serão apresentadas quando o checkout do pacote estiver configurado.',
   },
   {
     question: 'O e-book substitui acompanhamento psicológico?',
@@ -92,7 +105,7 @@ const questions = [
   },
   {
     question: 'Quais formas de pagamento e plataforma são aceitas?',
-    answer: 'O checkout da Kirvano apresenta cartão, Pix, Apple Pay e outros métodos. O valor parcelado tem acréscimo; confira as condições atualizadas na página antes de concluir.',
+    answer: 'O checkout do pacote ainda não está disponível. As formas de pagamento e eventuais condições de parcelamento serão informadas quando a compra for aberta.',
   },
 ];
 
@@ -109,6 +122,19 @@ function BookMockup({ compact = false }) {
         </div>
       </div>
       <p className="mockup-caption">Capa do e-book</p>
+    </div>
+  );
+}
+
+function BundleCovers() {
+  return (
+    <div className="bundle-covers" aria-label="Os três e-books incluídos no pacote">
+      {bundleBooks.map((book) => (
+        <figure className="bundle-cover" key={book.image}>
+          <img src={`${import.meta.env.BASE_URL}${book.image}`} alt={`Capa de ${book.title}`} />
+          <figcaption>{book.title}</figcaption>
+        </figure>
+      ))}
     </div>
   );
 }
@@ -157,25 +183,23 @@ function FAQItem({ item, open, onToggle }) {
 function PriceBlock({ compact = false }) {
   return (
     <div className={`price-block${compact ? ' price-block--compact' : ''}`}>
-      <span className="price-label">Condição especial</span>
-      <p className="price-reference">De <s>R$ 75</s> por</p>
-      <p className="price-current"><span>R$</span> 25</p>
-      <p className="price-footnote">R$ 25 à vista. O parcelamento pode ter acréscimo.</p>
+      <span className="price-label">Pacote com 3 e-books</span>
+      <p className="price-reference">Três leituras pelo valor de</p>
+      <p className="price-current"><span>R$</span> 30</p>
+      <p className="price-footnote">R$ 30 pelo pacote · R$ 10 por e-book.</p>
     </div>
   );
 }
 
-function CheckoutButton({ location, className = 'button button--checkout', children = 'Comprar por R$ 25' }) {
+function CheckoutButton({ className = 'button button--checkout', children = 'Compra ainda não disponível' }) {
   return (
-    <a
+    <button
       className={className}
-      href={CHECKOUT_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={() => window.dispatchEvent(new CustomEvent('ebook:cta', { detail: { location } }))}
+      type="button"
+      disabled
     >
-      {children} <ArrowIcon />
-    </a>
+      {children}
+    </button>
   );
 }
 
@@ -230,7 +254,7 @@ function App() {
             <h1>Você não precisa controlar tudo. <em>Precisa saber onde colocar sua energia.</em></h1>
             <p className="hero-description">Um guia prático de estoicismo para examinar suas reações, agir com mais intenção e parar de gastar energia tentando controlar o que não depende de você.</p>
             <div className="hero-actions">
-              <CheckoutButton location="hero" className="button button--checkout button--hero-buy">Comprar por R$ 25</CheckoutButton>
+              <CheckoutButton className="button button--checkout button--hero-buy">Pacote de 3 e-books · R$ 30</CheckoutButton>
               <a className="hero-content-link" href="#conteudo" onClick={() => notifyCta('hero-content')}>Ver o conteúdo primeiro <ArrowIcon /></a>
             </div>
             <p className="hero-note">PDF com 26 páginas, quatro capítulos, exercícios e um plano progressivo de sete dias.</p>
@@ -317,50 +341,48 @@ function App() {
         </section>
 
         <section className="product-section section-pad" aria-labelledby="product-title">
-          <div className="product-visual"><BookMockup compact /></div>
+          <div className="product-visual"><BundleCovers /></div>
           <div className="product-copy">
             <p className="eyebrow">O E-BOOK</p>
             <h2 id="product-title">Uma leitura para levar da página para a rotina.</h2>
-            <p className="product-description">A Arquitetura da Mente Inabalável organiza três disciplinas estoicas em uma leitura prática, com perguntas e exercícios para observar como você deseja, age e interpreta.</p>
+            <p className="product-description">O pacote reúne três e-books de filosofia prática: um guia sobre as disciplinas estoicas, reflexões sobre sabedoria e serenidade e caminhos para uma vida com mais sentido.</p>
             <div className="product-facts" aria-label="Dados do e-book">
               <p><span>FORMATO</span><strong>PDF</strong></p>
-              <p><span>EXTENSÃO</span><strong>26 páginas</strong></p>
-              <p><span>ESTRUTURA</span><strong>4 capítulos</strong></p>
+              <p><span>CONTEÚDO</span><strong>3 e-books</strong></p>
+              <p><span>VALOR TOTAL</span><strong>R$ 30</strong></p>
             </div>
             <ul className="product-list">
-              <li>Disciplina do desejo, da ação e do assentimento</li>
-              <li>Filtro de controle e checklist de intenção diária</li>
-              <li>Protocolo dos dez segundos antes de reagir</li>
-              <li>Reflexão matinal e revisão noturna</li>
-              <li>Plano progressivo de implementação de sete dias</li>
-              <li>Conclusão e resumo executivo com os três mandamentos</li>
+              <li>A Arquitetura da Mente Inabalável</li>
+              <li>O Manual do Estoico Moderno: Sabedoria e Serenidade</li>
+              <li>7 Caminhos para uma Vida com Mais Sentido</li>
             </ul>
-            <p className="product-format">A forma de acesso será informada quando a oferta estiver disponível.</p>
+            <p className="product-format">Três e-books por R$ 30 no total. O link de compra ainda não está disponível.</p>
             <div className="product-actions">
-              <CheckoutButton location="product" />
+              <CheckoutButton className="button button--checkout">Pacote de 3 e-books · R$ 30</CheckoutButton>
               <a className="text-link" href="#oferta" onClick={() => notifyCta('product-details')}>Ver condições <ArrowIcon /></a>
             </div>
           </div>
         </section>
 
         <section className="offer-section section-pad" id="oferta" aria-labelledby="offer-title">
-          <div className="offer-topline"><span className="offer-burst" aria-hidden="true">BLACK<br />FRIDAY</span><p className="eyebrow eyebrow--light">UMA ESCOLHA CONCRETA</p></div>
+          <div className="offer-topline"><span className="offer-burst" aria-hidden="true">3<br />E-BOOKS</span><p className="eyebrow eyebrow--light">TRÊS LEITURAS, UM SÓ PACOTE</p></div>
           <div className="offer-layout">
             <div className="offer-copy">
-              <h2 id="offer-title">Um guia para começar pelo que está ao seu alcance.</h2>
-              <p>Leia, experimente as práticas e observe o que muda na sua forma de responder. Sem promessa de atalhos — o valor está no exercício.</p>
+              <h2 id="offer-title">Três e-books para explorar ideias e levar à rotina.</h2>
+              <p>Um pacote digital com três leituras sobre estoicismo, serenidade e sentido — por R$ 30 no total, equivalente a R$ 10 por e-book.</p>
+              <BundleCovers />
               <div className="offer-availability">
-                <p className="availability-label">Checkout disponível pela Kirvano</p>
-                <p>R$ 25 à vista ou parcelamento com acréscimo. Confira os métodos de pagamento e as condições de acesso antes de concluir.</p>
+                <p className="availability-label">Oferta do pacote: 3 e-books por R$ 30</p>
+                <p>O checkout ainda não está disponível. As condições de pagamento e acesso serão informadas quando o link de compra estiver configurado.</p>
               </div>
             </div>
             <div className="offer-ticket">
               <PriceBlock />
-              <CheckoutButton location="offer" />
-              <p id="checkout-note" className="checkout-note">Você continuará no checkout da Kirvano para revisar e confirmar o pedido.</p>
+              <CheckoutButton>Link de compra em breve</CheckoutButton>
+              <p id="checkout-note" className="checkout-note">A compra ainda não pode ser concluída por este site.</p>
             </div>
           </div>
-          <p className="offer-disclaimer">A página de checkout apresenta os valores parcelados, meios de pagamento e termos vigentes antes da confirmação.</p>
+          <p className="offer-disclaimer">Preço informado para o pacote completo: R$ 30 pelos três e-books. Nenhum checkout está conectado a esta oferta no momento.</p>
         </section>
 
         <section className="faq-section section-pad" id="perguntas">
@@ -385,8 +407,8 @@ function App() {
           <div className="closing-rule" aria-hidden="true" />
           <p className="eyebrow eyebrow--light">A PRÓXIMA RESPOSTA AINDA É SUA</p>
           <h2>Você não escolhe todos os acontecimentos do seu dia. <em>Mas pode começar a examinar a maneira como responde a eles.</em></h2>
-          <CheckoutButton location="closing" className="button button--checkout button--closing-buy" />
-          <p>E-book de filosofia estoica aplicada à rotina. R$ 25 na condição informada.</p>
+          <CheckoutButton className="button button--checkout button--closing-buy">Pacote de 3 e-books · R$ 30</CheckoutButton>
+          <p>Três e-books por R$ 30 no total. O link de compra ainda não está disponível.</p>
         </section>
       </main>
 
