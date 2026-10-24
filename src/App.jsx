@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const bundleBooks = [
   {
@@ -113,29 +113,62 @@ function ArrowIcon() {
   return <span aria-hidden="true" className="arrow-icon">↗</span>;
 }
 
-function BookMockup({ compact = false }) {
+function BundleCovers({ onSelect, className = '' }) {
   return (
-    <div className={`book-stage${compact ? ' book-stage--compact' : ''}`}>
-      <div className="book">
-        <div className="book-cover">
-          <img className="book-cover-image" src={`${import.meta.env.BASE_URL}capa-ebook.png`} alt={compact ? '' : 'Capa de A Arquitetura da Mente Inabalável, com busto clássico e colunas'} />
-        </div>
-      </div>
-      <p className="mockup-caption">Capa do e-book</p>
-    </div>
-  );
-}
-
-function BundleCovers() {
-  return (
-    <div className="bundle-covers" aria-label="Os três e-books incluídos no pacote">
+    <div className={`bundle-covers ${className}`} role="group" aria-label="Capas dos três e-books incluídos no pacote">
       {bundleBooks.map((book) => (
         <figure className="bundle-cover" key={book.image}>
-          <img src={`${import.meta.env.BASE_URL}${book.image}`} alt={`Capa de ${book.title}`} />
+          <button
+            className="bundle-cover-button"
+            type="button"
+            onClick={() => onSelect(book)}
+            aria-label={`Ampliar a capa de ${book.title}`}
+          >
+            <img src={`${import.meta.env.BASE_URL}${book.image}`} alt="" />
+          </button>
           <figcaption>{book.title}</figcaption>
         </figure>
       ))}
     </div>
+  );
+}
+
+function BookPreviewDialog({ book, onClose }) {
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (book && !dialog.open) {
+      dialog.showModal();
+    } else if (!book && dialog.open) {
+      dialog.close();
+    }
+  }, [book]);
+
+  return (
+    <dialog
+      className="book-preview-dialog"
+      ref={dialogRef}
+      aria-labelledby="book-preview-title"
+      onClose={onClose}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) event.currentTarget.close();
+      }}
+    >
+      {book && (
+        <div className="book-preview-content">
+          <div className="book-preview-heading">
+            <h2 id="book-preview-title">{book.title}</h2>
+            <button className="book-preview-close" type="button" autoFocus onClick={() => dialogRef.current?.close()}>
+              Fechar <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <img className="book-preview-image" src={`${import.meta.env.BASE_URL}${book.image}`} alt={`Capa completa de ${book.title}`} />
+        </div>
+      )}
+    </dialog>
   );
 }
 
@@ -206,6 +239,7 @@ function CheckoutButton({ className = 'button button--checkout', children = 'Com
 function App() {
   const [faqOpen, setFaqOpen] = useState(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [previewBook, setPreviewBook] = useState(null);
 
   function notifyCta(location) {
     window.dispatchEvent(new CustomEvent('ebook:cta', { detail: { location } }));
@@ -250,16 +284,19 @@ function App() {
         <section className="hero" id="inicio">
           <div className="hero-grain" aria-hidden="true" />
           <div className="hero-copy">
-            <p className="eyebrow eyebrow--light"><span className="eyebrow-line" /> E-BOOK · GUIA PRÁTICO DAS TRÊS DISCIPLINAS ESTOICAS</p>
-            <h1>Você não precisa controlar tudo. <em>Precisa saber onde colocar sua energia.</em></h1>
-            <p className="hero-description">Um guia prático de estoicismo para examinar suas reações, agir com mais intenção e parar de gastar energia tentando controlar o que não depende de você.</p>
+            <p className="eyebrow eyebrow--light"><span className="eyebrow-line" /> PACOTE COM 3 E-BOOKS · FILOSOFIA PRÁTICA</p>
+            <h1>Três leituras para explorar <em>estoicismo, serenidade e sentido.</em></h1>
+            <p className="hero-description">Conheça as capas dos três e-books do pacote. Clique em qualquer uma para ver a imagem ampliada antes de decidir.</p>
             <div className="hero-actions">
               <CheckoutButton className="button button--checkout button--hero-buy">Pacote de 3 e-books · R$ 30</CheckoutButton>
               <a className="hero-content-link" href="#conteudo" onClick={() => notifyCta('hero-content')}>Ver o conteúdo primeiro <ArrowIcon /></a>
             </div>
-            <p className="hero-note">PDF com 26 páginas, quatro capítulos, exercícios e um plano progressivo de sete dias.</p>
+            <p className="hero-note">Três e-books digitais por R$ 30 no total. O link de compra ainda não está disponível.</p>
           </div>
-          <BookMockup />
+          <div className="hero-gallery">
+            <BundleCovers onSelect={setPreviewBook} />
+            <p className="hero-gallery-note">Clique nas capas para ampliar</p>
+          </div>
           <div className="hero-index" aria-hidden="true"><span>01</span><span>—</span><span>10</span></div>
         </section>
 
@@ -341,10 +378,10 @@ function App() {
         </section>
 
         <section className="product-section section-pad" aria-labelledby="product-title">
-          <div className="product-visual"><BundleCovers /></div>
+          <div className="product-visual"><BundleCovers onSelect={setPreviewBook} /></div>
           <div className="product-copy">
-            <p className="eyebrow">O E-BOOK</p>
-            <h2 id="product-title">Uma leitura para levar da página para a rotina.</h2>
+            <p className="eyebrow">O PACOTE</p>
+            <h2 id="product-title">Três e-books para ler e consultar no seu ritmo.</h2>
             <p className="product-description">O pacote reúne três e-books de filosofia prática: um guia sobre as disciplinas estoicas, reflexões sobre sabedoria e serenidade e caminhos para uma vida com mais sentido.</p>
             <div className="product-facts" aria-label="Dados do e-book">
               <p><span>FORMATO</span><strong>PDF</strong></p>
@@ -370,7 +407,7 @@ function App() {
             <div className="offer-copy">
               <h2 id="offer-title">Três e-books para explorar ideias e levar à rotina.</h2>
               <p>Um pacote digital com três leituras sobre estoicismo, serenidade e sentido — por R$ 30 no total, equivalente a R$ 10 por e-book.</p>
-              <BundleCovers />
+              <BundleCovers onSelect={setPreviewBook} />
               <div className="offer-availability">
                 <p className="availability-label">Oferta do pacote: 3 e-books por R$ 30</p>
                 <p>O checkout ainda não está disponível. As condições de pagamento e acesso serão informadas quando o link de compra estiver configurado.</p>
@@ -411,6 +448,8 @@ function App() {
           <p>Três e-books por R$ 30 no total. O link de compra ainda não está disponível.</p>
         </section>
       </main>
+
+      <BookPreviewDialog book={previewBook} onClose={() => setPreviewBook(null)} />
 
       <footer className="site-footer">
         <a className="wordmark wordmark--footer" href="#inicio">
