@@ -22,6 +22,8 @@ O site é publicado automaticamente em `https://lavion234-spec.github.io/Arquite
 
 Cada push para `main` publica automaticamente. Para a ativação inicial, selecione **GitHub Actions** em **Settings → Pages**. Como alternativa, crie o secret `PAGES_ADMIN_TOKEN` no repositório com um token de acesso fino que tenha permissões administrativas e de Pages; o workflow poderá habilitar o Pages automaticamente. Nunca coloque esse token nos arquivos do projeto.
 
-## Oferta e dados comerciais
+## Oferta e informações legais
 
-A oferta apresentada reúne três e-books por R$ 30 no total (R$ 10 por e-book). O checkout deste pacote ainda não está conectado; os botões permanecem desativados para não direcionar a compra a uma oferta diferente. Antes de abrir a compra, configure o link correto e informe as condições de pagamento, entrega e acesso, política de reembolso, responsável pela venda, contato de suporte e links legais.
+A página apresenta um pacote de três e-books por R$ 30 e direciona os botões de compra para o checkout da Kirvano. O preço e as condições finais devem ser conferidos no checkout antes da confirmação do pedido.
+
+As páginas de privacidade, termos de uso e compra/reembolso estão disponíveis nos links do rodapé. A identificação do vendedor e os canais de suporte não foram fornecidos para publicação e devem ser conferidos no checkout antes da compra. Revise esses dados e as condições finais da oferta antes de divulgar o site.

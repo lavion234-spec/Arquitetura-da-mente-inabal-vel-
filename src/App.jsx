@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+const CHECKOUT_URL = 'https://pay.kirvano.com/072f3ffe-2362-4abe-93d3-628658eee126';
+const legalPages = ['privacidade', 'termos', 'compra-e-reembolso'];
+
+function getLegalPageFromHash() {
+  const page = window.location.hash.slice(1);
+  return legalPages.includes(page) ? page : null;
+}
+
 const bundleBooks = [
   {
     image: 'capa-ebook.png',
@@ -93,7 +101,7 @@ const questions = [
   },
   {
     question: 'Como receberei o acesso?',
-    answer: 'O link de compra ainda não está disponível. As informações de acesso serão apresentadas quando o checkout do pacote estiver configurado.',
+    answer: 'A compra é feita no checkout da Kirvano. Confira nesse ambiente as instruções de entrega e acesso antes de concluir o pedido.',
   },
   {
     question: 'O e-book substitui acompanhamento psicológico?',
@@ -101,11 +109,11 @@ const questions = [
   },
   {
     question: 'Quais são as condições de reembolso?',
-    answer: 'A política de reembolso será informada junto às condições de compra, antes da abertura do checkout.',
+    answer: 'Em compras feitas por consumidor no Brasil, o direito de arrependimento previsto no Código de Defesa do Consumidor pode ser exercido no prazo legal de sete dias, conforme as condições aplicáveis. Consulte os canais indicados no checkout e no comprovante do pedido.',
   },
   {
     question: 'Quais formas de pagamento e plataforma são aceitas?',
-    answer: 'O checkout do pacote ainda não está disponível. As formas de pagamento e eventuais condições de parcelamento serão informadas quando a compra for aberta.',
+    answer: 'A compra é concluída no checkout da Kirvano. As formas de pagamento, o valor total e eventuais condições são os exibidos nesse ambiente antes da confirmação.',
   },
 ];
 
@@ -224,15 +232,105 @@ function PriceBlock({ compact = false }) {
   );
 }
 
-function CheckoutButton({ className = 'button button--checkout', children = 'Compra ainda não disponível' }) {
+function CheckoutButton({ className = 'button button--checkout', children = 'Comprar pacote de e-books', location = 'offer' }) {
   return (
-    <button
+    <a
       className={className}
-      type="button"
-      disabled
+      href={CHECKOUT_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => window.dispatchEvent(new CustomEvent('ebook:cta', { detail: { location } }))}
     >
-      {children}
-    </button>
+      {children}<ArrowIcon />
+    </a>
+  );
+}
+
+function LegalPage({ page }) {
+  const pageTitles = {
+    privacidade: 'Política de privacidade',
+    termos: 'Termos de uso',
+    'compra-e-reembolso': 'Compra, acesso e reembolso',
+  };
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = `${pageTitles[page]} | A Arquitetura da Mente Inabalável`;
+    return () => {
+      document.title = previousTitle;
+    };
+  }, [page]);
+
+  return (
+    <>
+      <header className="legal-header">
+        <a className="wordmark" href="#inicio" aria-label="Voltar ao início">
+          <span className="wordmark-symbol" aria-hidden="true">A</span>
+          <span>ARQUITETURA<br /><small>DA MENTE INABALÁVEL</small></span>
+        </a>
+        <a className="header-cta" href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer">
+          Ir ao checkout <ArrowIcon />
+        </a>
+      </header>
+      <main className="legal-main">
+        <a className="legal-back-link" href="#inicio">← Voltar à página principal</a>
+        <article className="legal-document">
+          <p className="eyebrow">INFORMAÇÕES DA OFERTA</p>
+          <h1>{pageTitles[page]}</h1>
+
+          {page === 'privacidade' && (
+            <>
+              <p>Esta política descreve, de forma direta, o que acontece com dados durante a navegação nesta página e ao seguir para o checkout externo do pacote de e-books.</p>
+              <h2>Dados tratados nesta página</h2>
+              <p>Este site não oferece cadastro, formulário de contato ou campo de pagamento e não foi configurado com ferramentas próprias de análise de audiência ou publicidade. A hospedagem da página e o carregamento de fontes externas podem envolver dados técnicos da conexão, tratados pelos respectivos provedores conforme suas políticas.</p>
+              <p>As fontes tipográficas são carregadas pelo Google Fonts. A página é hospedada no GitHub Pages. Consulte as políticas do <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google</a> e do <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub</a> para informações sobre o tratamento feito por esses serviços.</p>
+              <h2>Checkout e dados da compra</h2>
+              <p>Ao abrir o checkout da Kirvano, você deixa este site e passa a interagir com uma plataforma externa. Os dados informados para pagamento, emissão de comprovantes, entrega do produto ou suporte são tratados nesse ambiente segundo os avisos e políticas apresentados pela plataforma e pelo vendedor. Este site não recebe os dados de pagamento digitados no checkout.</p>
+              <h2>Seus direitos e contato</h2>
+              <p>Para exercer direitos relacionados a dados da compra, use os canais do vendedor e da plataforma apresentados no checkout ou no comprovante do pedido. Antes de concluir a compra, confira a identificação do vendedor e o canal de atendimento disponíveis no checkout. Esta página não contém dados de identificação ou contato do responsável pela oferta porque eles não foram fornecidos para publicação.</p>
+              <p>Última atualização: 25 de outubro de 2026.</p>
+            </>
+          )}
+
+          {page === 'termos' && (
+            <>
+              <p>Ao navegar neste site, você pode consultar a apresentação do pacote “A Arquitetura da Mente Inabalável” e seguir para o checkout externo. A compra só é concluída após a confirmação no checkout.</p>
+              <h2>Conteúdo e finalidade</h2>
+              <p>O pacote apresentado reúne três e-books digitais de filosofia prática: “A Arquitetura da Mente Inabalável”, “O Manual do Estoico Moderno: Sabedoria e Serenidade” e “7 Caminhos para uma Vida com Mais Sentido”. O material tem finalidade educativa e não constitui aconselhamento médico, psicológico, jurídico ou financeiro, nem substitui acompanhamento profissional.</p>
+              <h2>Uso do material</h2>
+              <p>O conteúdo é destinado ao uso pessoal de quem o adquiriu. Não é permitido redistribuir, revender ou publicar cópias do material sem autorização do titular dos direitos, ressalvadas as hipóteses permitidas pela legislação.</p>
+              <h2>Informações da oferta</h2>
+              <p>O site apresenta o pacote por R$ 30. Antes de pagar, confira no checkout a identificação do vendedor, a composição do pedido, o preço total, as formas de pagamento, as condições de entrega e acesso e os canais de atendimento. Em caso de divergência, prevalecem as informações exibidas na etapa final do checkout antes da confirmação da compra.</p>
+              <h2>Atualizações</h2>
+              <p>Estes termos podem ser atualizados para refletir alterações no site ou na oferta. A versão publicada nesta página é a vigente na data de consulta.</p>
+              <p>Última atualização: 25 de outubro de 2026.</p>
+            </>
+          )}
+
+          {page === 'compra-e-reembolso' && (
+            <>
+              <p>O botão de compra direciona para o checkout da Kirvano. A compra não é processada por este site.</p>
+              <h2>Antes de confirmar</h2>
+              <p>Confira no checkout quem é o vendedor, o produto e a quantidade do pedido, o valor total, as opções de pagamento, as instruções de entrega e acesso e os canais de suporte. O site apresenta o pacote por R$ 30; confirme o preço final no checkout antes de pagar.</p>
+              <h2>Arrependimento e reembolso</h2>
+              <p>Nas compras realizadas por consumidor no Brasil, o artigo 49 do Código de Defesa do Consumidor prevê o direito de arrependimento no prazo de sete dias, contado da assinatura ou do recebimento do produto ou serviço, conforme o caso e a legislação aplicável. Para solicitar o cancelamento ou tratar de reembolso, utilize os canais informados pelo vendedor e pela plataforma no checkout ou no comprovante da compra.</p>
+              <p>Esta página não cria condições de reembolso adicionais às previstas em lei ou às explicitamente apresentadas pelo vendedor no checkout. Guarde o comprovante e consulte as instruções da plataforma para acompanhar a solicitação.</p>
+              <h2>Plataforma externa</h2>
+              <p>As condições finais de pagamento, entrega e atendimento são apresentadas no checkout da Kirvano. Confira essas informações antes de concluir o pedido.</p>
+            </>
+          )}
+
+          <a className="button button--checkout legal-checkout" href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer">
+            Acessar checkout da Kirvano <ArrowIcon />
+          </a>
+        </article>
+      </main>
+      <footer className="legal-footer">
+        <a href="#privacidade">Privacidade</a>
+        <a href="#termos">Termos de uso</a>
+        <a href="#compra-e-reembolso">Compra e reembolso</a>
+      </footer>
+    </>
   );
 }
 
@@ -240,10 +338,22 @@ function App() {
   const [faqOpen, setFaqOpen] = useState(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [previewBook, setPreviewBook] = useState(null);
+  const [legalPage, setLegalPage] = useState(getLegalPageFromHash);
+
+  useEffect(() => {
+    function syncLegalPage() {
+      setLegalPage(getLegalPageFromHash());
+    }
+
+    window.addEventListener('hashchange', syncLegalPage);
+    return () => window.removeEventListener('hashchange', syncLegalPage);
+  }, []);
 
   function notifyCta(location) {
     window.dispatchEvent(new CustomEvent('ebook:cta', { detail: { location } }));
   }
+
+  if (legalPage) return <LegalPage page={legalPage} />;
 
   return (
     <>
@@ -288,10 +398,10 @@ function App() {
             <h1>Três leituras para explorar <em>estoicismo, serenidade e sentido.</em></h1>
             <p className="hero-description">Conheça as capas dos três e-books do pacote. Clique em qualquer uma para ver a imagem ampliada antes de decidir.</p>
             <div className="hero-actions">
-              <CheckoutButton className="button button--checkout button--hero-buy">Pacote de 3 e-books · R$ 30</CheckoutButton>
+              <CheckoutButton className="button button--checkout button--hero-buy" location="hero">Pacote de 3 e-books · R$ 30</CheckoutButton>
               <a className="hero-content-link" href="#conteudo" onClick={() => notifyCta('hero-content')}>Ver o conteúdo primeiro <ArrowIcon /></a>
             </div>
-            <p className="hero-note">Três e-books digitais por R$ 30 no total. O link de compra ainda não está disponível.</p>
+            <p className="hero-note">Três e-books digitais por R$ 30 no total. A compra é concluída no checkout da Kirvano.</p>
           </div>
           <div className="hero-gallery">
             <BundleCovers onSelect={setPreviewBook} />
@@ -393,9 +503,9 @@ function App() {
               <li>O Manual do Estoico Moderno: Sabedoria e Serenidade</li>
               <li>7 Caminhos para uma Vida com Mais Sentido</li>
             </ul>
-            <p className="product-format">Três e-books por R$ 30 no total. O link de compra ainda não está disponível.</p>
+            <p className="product-format">Três e-books por R$ 30 no total. Confira as condições finais no checkout.</p>
             <div className="product-actions">
-              <CheckoutButton className="button button--checkout">Pacote de 3 e-books · R$ 30</CheckoutButton>
+              <CheckoutButton className="button button--checkout" location="product">Pacote de 3 e-books · R$ 30</CheckoutButton>
               <a className="text-link" href="#oferta" onClick={() => notifyCta('product-details')}>Ver condições <ArrowIcon /></a>
             </div>
           </div>
@@ -410,16 +520,16 @@ function App() {
               <BundleCovers onSelect={setPreviewBook} />
               <div className="offer-availability">
                 <p className="availability-label">Oferta do pacote: 3 e-books por R$ 30</p>
-                <p>O checkout ainda não está disponível. As condições de pagamento e acesso serão informadas quando o link de compra estiver configurado.</p>
+                <p>A compra é concluída no checkout da Kirvano. Consulte lá as condições de pagamento, entrega e acesso antes de confirmar.</p>
               </div>
             </div>
             <div className="offer-ticket">
               <PriceBlock />
-              <CheckoutButton>Link de compra em breve</CheckoutButton>
-              <p id="checkout-note" className="checkout-note">A compra ainda não pode ser concluída por este site.</p>
+              <CheckoutButton location="offer-ticket">Comprar pacote · R$ 30</CheckoutButton>
+              <p id="checkout-note" className="checkout-note">Você continuará para o checkout da Kirvano.</p>
             </div>
           </div>
-          <p className="offer-disclaimer">Preço informado para o pacote completo: R$ 30 pelos três e-books. Nenhum checkout está conectado a esta oferta no momento.</p>
+          <p className="offer-disclaimer">O site apresenta o pacote completo por R$ 30. Confira o valor e as condições finais no checkout antes de concluir a compra.</p>
         </section>
 
         <section className="faq-section section-pad" id="perguntas">
@@ -444,8 +554,8 @@ function App() {
           <div className="closing-rule" aria-hidden="true" />
           <p className="eyebrow eyebrow--light">A PRÓXIMA RESPOSTA AINDA É SUA</p>
           <h2>Você não escolhe todos os acontecimentos do seu dia. <em>Mas pode começar a examinar a maneira como responde a eles.</em></h2>
-          <CheckoutButton className="button button--checkout button--closing-buy">Pacote de 3 e-books · R$ 30</CheckoutButton>
-          <p>Três e-books por R$ 30 no total. O link de compra ainda não está disponível.</p>
+          <CheckoutButton className="button button--checkout button--closing-buy" location="closing">Pacote de 3 e-books · R$ 30</CheckoutButton>
+          <p>Três e-books por R$ 30 no total. A compra é concluída no checkout da Kirvano.</p>
         </section>
       </main>
 
@@ -458,11 +568,10 @@ function App() {
         </a>
         <p className="footer-note">Filosofia prática, sem promessas fáceis.</p>
         <div className="footer-details">
-          <p><span>Responsável pela venda</span>Identificação apresentada antes da abertura da oferta.</p>
-          <p><span>Suporte</span>Canal de contato informado antes da compra.</p>
-          <p><span>Termos de uso</span>Disponíveis quando a oferta for aberta.</p>
-          <p><span>Privacidade</span>Política publicada antes da coleta de dados.</p>
-          <p><span>Compra e reembolso</span>Condições apresentadas antes do checkout.</p>
+          <p><span>Vendedor e suporte</span>Confira a identificação e os canais de atendimento no checkout antes de comprar.</p>
+          <a href="#termos"><span>Termos de uso</span>Regras de utilização deste site e do material.</a>
+          <a href="#privacidade"><span>Privacidade</span>Como funciona o tratamento de dados nesta página.</a>
+          <a href="#compra-e-reembolso"><span>Compra e reembolso</span>Informações sobre checkout, acesso e cancelamento.</a>
         </div>
         <div className="footer-bottom"><span>© {new Date().getFullYear()} A Arquitetura da Mente Inabalável</span><span>Um material educativo. Não substitui acompanhamento profissional.</span></div>
       </footer>
